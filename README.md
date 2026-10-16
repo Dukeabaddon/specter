@@ -179,21 +179,6 @@ for post in posts:
 
 ---
 
-## Roadmap
-
-- [x] Reverse-engineer modern Meta Comet React SPA and Relay architecture
-- [x] Dual-mode hybrid fetcher (Fast HTTP + Stealth Playwright fallback)
-- [x] Automated login dialog suppression and virtualized feed scrolling
-- [x] SQLite deduplication engine (SHA-256 fingerprinting)
-- [x] Multi-page concurrent polling worker pool (`--workers`)
-- [x] Direct webhook emitter (n8n, Discord, Telegram, custom HTTP POST)
-- [x] Headless Docker container with pre-installed Chromium
-- [ ] FastAPI lightweight REST & health probe server (`/v1/posts`, `/healthz`)
-- [ ] Dynamic residential & datacenter proxy rotation middleware
-- [ ] Minimalist real-time WebUI monitoring dashboard
-
----
-
 ## FAQ
 
 <details>
