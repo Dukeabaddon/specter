@@ -42,6 +42,10 @@
 
 ## specter 的双模式工作原理
 
+<p align="center">
+  <img src="../../assets/architecture.png" alt="specter Architecture Diagram" width="100%" style="border-radius: 8px; border: 1px solid #1e293b;" />
+</p>
+
 1. **Tier 2 (隐身 Playwright 浏览器):** 以匿名访客身份运行，自动清除遮罩登录弹窗，解除 DOM 滚动限制，并捕获公共访客凭证 (`datr`)。
 2. **Tier 1 (极速 HTTP 客户端):** 复用访客 Cookie，无需启动浏览器即可在 **~500 毫秒** 内直接提取页面内嵌的 Relay SSR JSON 数据，仅消耗约 25MB 内存。
 3. **自我修复闭环:** 当凭证过期或被拦截时，系统无缝回退至 Playwright 重新刷新 Cookie。

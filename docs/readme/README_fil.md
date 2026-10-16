@@ -44,6 +44,10 @@ Ang **specter** ay libre, self-hosted, at dinisenyo para gumana nang walang pers
 
 ## Paano Gumagana ang specter?
 
+<p align="center">
+  <img src="../../assets/architecture.png" alt="specter Architecture Diagram" width="100%" style="border-radius: 8px; border: 1px solid #1e293b;" />
+</p>
+
 Gumagamit ang specter ng **Dual-Mode Symbiotic Pipeline**:
 
 1. **Tier 2 (Stealth Playwright):** Tumatakbo nang minsan lang bilang anonymous visitor. Tinatanggal nito ang "Mag-log in" popup, ini-unlock ang scrolling, at kinukuha ang public visitor session tokens (`datr`).
