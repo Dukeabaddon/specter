@@ -1,0 +1,14 @@
+services:
+  specter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: specter-engine
+    restart: unless-stopped
+    environment:
+      - SPECTER_PAGE=QCGov
+      - SPECTER_INTERVAL=300
+      - SPECTER_MODE=auto
+      # - SPECTER_WEBHOOK_URL=http://n8n:5678/webhook/fb-posts
+    volumes:
+      - ./data:/app/data
