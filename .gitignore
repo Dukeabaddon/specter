@@ -36,11 +36,15 @@ data/*.db
 data/*.sqlite
 data/*.json
 
-# Research scratch screenshots and test dumps
-research/*.png
-research/*.html
-research/facebook-scraper/
+# Internal developer notes & research artifacts
+.context/
+AGENTS.md
+LINKEDIN_LAUNCH.md
+research/
+apify-re-analysis.md
+facebook-scraper-analysis.md
 
 # OS
 .DS_Store
 Thumbs.db
+
