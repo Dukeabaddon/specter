@@ -13,7 +13,8 @@ def test_db_save_and_deduplication():
             page_name="QCGov",
             text="Announcement 1",
             url="https://facebook.com/QCGov/posts/101",
-            is_suspension=False
+            images=["https://scontent.fmnl...jpg"],
+            raw_metadata={"source": "http_relay_json"}
         )
 
         # First insert succeeds
@@ -27,19 +28,28 @@ def test_db_save_and_deduplication():
         posts = db.get_latest_posts("QCGov")
         assert len(posts) == 1
         assert posts[0].post_id == "post_101"
+        assert posts[0].text == "Announcement 1"
+        assert posts[0].images == ["https://scontent.fmnl...jpg"]
+        assert posts[0].raw_metadata == {"source": "http_relay_json"}
 
-def test_db_suspension_query():
+def test_db_query_multiple_pages():
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = Path(tmpdir) / "test.db"
         db = PostDatabase(str(db_path))
 
-        p_normal = Post(post_id="p1", page_name="QCGov", text="Normal", url="", is_suspension=False)
-        p_susp = Post(post_id="p2", page_name="QCGov", text="Walang pasok", url="", is_suspension=True, suspension_details={"confidence": 0.95})
+        p_qc = Post(post_id="p1", page_name="QCGov", text="QC update", url="")
+        p_manila = Post(post_id="p2", page_name="ManilaPIO", text="Manila update", url="")
 
-        db.save_post(p_normal)
-        db.save_post(p_susp)
+        db.save_post(p_qc)
+        db.save_post(p_manila)
 
-        suspensions = db.get_suspension_posts()
-        assert len(suspensions) == 1
-        assert suspensions[0].post_id == "p2"
-        assert suspensions[0].suspension_details["confidence"] == 0.95
+        qc_posts = db.get_latest_posts("QCGov")
+        assert len(qc_posts) == 1
+        assert qc_posts[0].post_id == "p1"
+
+        manila_posts = db.get_latest_posts("ManilaPIO")
+        assert len(manila_posts) == 1
+        assert manila_posts[0].post_id == "p2"
+
+        all_posts = db.get_latest_posts(limit=10)
+        assert len(all_posts) == 2

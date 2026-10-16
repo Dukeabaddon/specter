@@ -12,8 +12,6 @@ class Post:
     scraped_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     images: List[str] = field(default_factory=list)
     video: Optional[str] = None
-    is_suspension: bool = False
-    suspension_details: Optional[Dict[str, Any]] = None
     raw_metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -26,7 +24,5 @@ class Post:
             "scraped_at": self.scraped_at,
             "images": self.images,
             "video": self.video,
-            "is_suspension": self.is_suspension,
-            "suspension_details": self.suspension_details,
             "raw_metadata": self.raw_metadata,
         }

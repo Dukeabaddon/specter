@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from typing import List, Optional, Tuple
+from typing import List, Optional
 from pathlib import Path
 from ..models import Post
 
@@ -29,8 +29,6 @@ class PostDatabase:
                     scraped_at TEXT NOT NULL,
                     images_json TEXT,
                     video TEXT,
-                    is_suspension INTEGER DEFAULT 0,
-                    suspension_details_json TEXT,
                     metadata_json TEXT
                 )
             """)
@@ -56,8 +54,8 @@ class PostDatabase:
             conn.execute("""
                 INSERT INTO posts (
                     post_id, page_name, text, url, published_at, scraped_at,
-                    images_json, video, is_suspension, suspension_details_json, metadata_json
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    images_json, video, metadata_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 post.post_id,
                 post.page_name,
@@ -67,8 +65,6 @@ class PostDatabase:
                 post.scraped_at,
                 json.dumps(post.images),
                 post.video,
-                1 if post.is_suspension else 0,
-                json.dumps(post.suspension_details) if post.suspension_details else None,
                 json.dumps(post.raw_metadata) if post.raw_metadata else None,
             ))
             conn.commit()
@@ -98,32 +94,6 @@ class PostDatabase:
                     scraped_at=r["scraped_at"],
                     images=json.loads(r["images_json"]) if r["images_json"] else [],
                     video=r["video"],
-                    is_suspension=bool(r["is_suspension"]),
-                    suspension_details=json.loads(r["suspension_details_json"]) if r["suspension_details_json"] else None,
                     raw_metadata=json.loads(r["metadata_json"]) if r["metadata_json"] else {},
                 ))
             return posts
-
-    def get_suspension_posts(self, limit: int = 10) -> List[Post]:
-        with self._get_connection() as conn:
-            cursor = conn.execute("""
-                SELECT * FROM posts WHERE is_suspension = 1 
-                ORDER BY scraped_at DESC LIMIT ?
-            """, (limit,))
-            rows = cursor.fetchall()
-            return [
-                Post(
-                    post_id=r["post_id"],
-                    page_name=r["page_name"],
-                    text=r["text"] or "",
-                    url=r["url"] or "",
-                    published_at=r["published_at"],
-                    scraped_at=r["scraped_at"],
-                    images=json.loads(r["images_json"]) if r["images_json"] else [],
-                    video=r["video"],
-                    is_suspension=True,
-                    suspension_details=json.loads(r["suspension_details_json"]) if r["suspension_details_json"] else None,
-                    raw_metadata=json.loads(r["metadata_json"]) if r["metadata_json"] else {},
-                )
-                for r in rows
-            ]

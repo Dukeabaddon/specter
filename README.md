@@ -148,7 +148,6 @@ python3 main.py --page QCGov --limit 3 --json | jq '.[0].text'
 | `python3 main.py --mode http` | Force Fast HTTP-only mode (~500ms) |
 | `python3 main.py --mode playwright` | Force stealth Playwright Chromium mode |
 | `python3 main.py --db-list` | Display recent stored posts from SQLite database |
-| `python3 main.py --test-classifier` | Run built-in sample downstream event classification test |
 
 ---
 
