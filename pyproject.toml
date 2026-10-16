@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "specter-engine"
+version = "0.1.0"
+description = "Self-hosted dual-mode Facebook public page monitor and scraping engine"
+readme = "README.md"
+authors = [{ name = "Aaron Mecate", email = "aaronmecate182@gmail.com" }]
+license = { text = "MIT" }
+requires-python = ">=3.10"
+keywords = ["facebook-scraper", "comet", "relay", "playwright", "monitoring", "self-hosted", "anti-ban"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+dependencies = [
+    "playwright>=1.49.0",
+    "httpx>=0.28.0",
+    "requests>=2.32.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.3.0",
+    "apscheduler>=3.10.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/Dukeabaddon/specter"
+Repository = "https://github.com/Dukeabaddon/specter.git"
+Issues = "https://github.com/Dukeabaddon/specter/issues"
+
+[project.scripts]
+specter = "main:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
