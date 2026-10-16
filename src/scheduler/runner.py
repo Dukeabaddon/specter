@@ -15,14 +15,35 @@ class MonitorRunner:
         pages: List[str],
         db: Optional[PostDatabase] = None,
         fetcher: Optional[HybridFetcher] = None,
+        webhook_url: Optional[str] = None,
         on_new_post: Optional[Callable[[Post], None]] = None,
         on_suspension_alert: Optional[Callable[[Post], None]] = None,
     ):
         self.pages = pages
         self.db = db or PostDatabase()
         self.fetcher = fetcher or HybridFetcher(mode="auto")
+        self.webhook_url = webhook_url
         self.on_new_post = on_new_post
         self.on_suspension_alert = on_suspension_alert
+
+    def _dispatch_webhook(self, post: Post):
+        if not self.webhook_url:
+            return
+        import httpx
+        payload = {
+            "event": "post.new",
+            "page": post.page_name,
+            "post": post.to_dict(),
+            "is_suspension": post.is_suspension,
+            "suspension_details": post.suspension_details
+        }
+        try:
+            with httpx.Client(timeout=10.0) as client:
+                resp = client.post(self.webhook_url, json=payload)
+                resp.raise_for_status()
+                logger.info(f"[Webhook] Dispatched post {post.post_id} -> {self.webhook_url} ({resp.status_code})")
+        except Exception as e:
+            logger.error(f"[Webhook] Failed to dispatch post {post.post_id} to {self.webhook_url}: {e}")
 
     def poll_once(self) -> Dict[str, Any]:
         """
@@ -68,6 +89,8 @@ class MonitorRunner:
                             self.on_new_post(post)
                         except Exception as e:
                             logger.error(f"Error in on_new_post callback: {e}")
+
+                    self._dispatch_webhook(post)
 
                     if post.is_suspension:
                         page_suspensions += 1
