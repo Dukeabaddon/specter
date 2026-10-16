@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local database & session artifacts
+data/*.db
+data/*.sqlite
+data/*.json
+
+# Research scratch screenshots and test dumps
+research/*.png
+research/*.html
+research/facebook-scraper/
+
+# OS
+.DS_Store
+Thumbs.db
