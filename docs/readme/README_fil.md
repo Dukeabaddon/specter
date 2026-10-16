@@ -1,8 +1,8 @@
 <div align="center">
 
-[English](../../README.md) · **Filipino** · [简体中文](README_zh.md) · [日本語](README_ja.md) · [Español](README_es.md)
+[English](../../README.md) · **Filipino** · [简体中文](README_zh.md)
 
-# 👻 specter: Self-Hosted Facebook Public Page Scraper
+# specter: Self-Hosted Facebook Public Page Scraper
 
 ### Mabilis at matatag na dual-mode engine para sa tuloy-tuloy na pag-monitor ng mga pampublikong Facebook page.
 
@@ -31,7 +31,7 @@
 
 ---
 
-## ⚡ Bakit Sira ang Ibang Scrapers?
+## Bakit Sira ang Ibang Scrapers?
 
 - **Pagsasara ng mbasic:** Lahat ng lumang Python scrapers ay nakadepende sa mbasic HTML.
 - **Comet React SPA:** Puro dynamic JavaScript at Relay streams na ang ginagamit ng Facebook ngayon.
@@ -42,7 +42,7 @@ Ang **specter** ay libre, self-hosted, at dinisenyo para gumana nang walang pers
 
 ---
 
-## 🔬 Paano Gumagana ang specter?
+## Paano Gumagana ang specter?
 
 Gumagamit ang specter ng **Dual-Mode Symbiotic Pipeline**:
 
@@ -52,7 +52,7 @@ Gumagamit ang specter ng **Dual-Mode Symbiotic Pipeline**:
 
 ---
 
-## 🚀 Mabilisang Pagsisimula
+## Mabilisang Pagsisimula
 
 ```bash
 git clone https://github.com/Dukeabaddon/specter.git
@@ -72,7 +72,7 @@ python3 main.py --page QCGov --limit 3
 
 ---
 
-## 🛡️ Anti-Ban Arkitektura
+## Anti-Ban Arkitektura
 
 - **Walang Login:** 100% anonymous public session. Hindi kailanman manganganib ang iyong account.
 - **Magaan sa Resource:** Hindi nagpapatakbo ng mabigat na browser 24/7.

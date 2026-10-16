@@ -1,8 +1,8 @@
 <div align="center">
 
-[English](../../README.md) · [Filipino](README_fil.md) · **简体中文** · [日本語](README_ja.md) · [Español](README_es.md)
+[English](../../README.md) · [Filipino](README_fil.md) · **简体中文**
 
-# 👻 specter: 自托管 Facebook 公开主页采集与监控引擎
+# specter: 自托管 Facebook 公开主页采集与监控引擎
 
 ### 专为持续监控 Facebook 公开主页打造的现代化双模式采集器。
 
@@ -31,7 +31,7 @@
 
 ---
 
-## ⚡ 为什么传统采集器全部失效？
+## 为什么传统采集器全部失效？
 
 - **mbasic 永久下线:** 绝大部分 Python 库依赖该入口获取静态 HTML。
 - **Comet React 单页应用:** Facebook 全面转为动态 Relay 数据流渲染。
@@ -40,7 +40,7 @@
 
 ---
 
-## 🔬 specter 的双模式工作原理
+## specter 的双模式工作原理
 
 1. **Tier 2 (隐身 Playwright 浏览器):** 以匿名访客身份运行，自动清除遮罩登录弹窗，解除 DOM 滚动限制，并捕获公共访客凭证 (`datr`)。
 2. **Tier 1 (极速 HTTP 客户端):** 复用访客 Cookie，无需启动浏览器即可在 **~500 毫秒** 内直接提取页面内嵌的 Relay SSR JSON 数据，仅消耗约 25MB 内存。
@@ -48,7 +48,7 @@
 
 ---
 
-## 🚀 快速开始
+## 快速开始
 
 ```bash
 git clone https://github.com/Dukeabaddon/specter.git
