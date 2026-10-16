@@ -1,6 +1,6 @@
 <div align="center">
 
-[English](../../README.md) · **Filipino** · [简体中文](README_zh.md)
+[English](../../README.md) · **Filipino** · [简体中文](README_zh.md) · [繁體中文](README_zh-TW.md) · [日本語](README_ja.md) · [한국어](README_ko.md) · [Español](README_es.md) · [Français](README_fr.md) · [Deutsch](README_de.md) · [Русский](README_ru.md) · [Português](README_pt.md) · [Bahasa Indonesia](README_id.md)
 
 # specter: Self-Hosted Facebook Public Page Scraper
 

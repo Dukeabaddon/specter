@@ -1,6 +1,6 @@
 <div align="center">
 
-[English](../../README.md) · [Filipino](README_fil.md) · **简体中文**
+[English](../../README.md) · [Filipino](README_fil.md) · **简体中文** · [繁體中文](README_zh-TW.md) · [日本語](README_ja.md) · [한국어](README_ko.md) · [Español](README_es.md) · [Français](README_fr.md) · [Deutsch](README_de.md) · [Русский](README_ru.md) · [Português](README_pt.md) · [Bahasa Indonesia](README_id.md)
 
 # specter: 自托管 Facebook 公开主页采集与监控引擎
 

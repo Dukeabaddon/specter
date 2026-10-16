@@ -1,6 +1,6 @@
 <div align="center">
 
-**English** · [Filipino](docs/readme/README_fil.md) · [简体中文](docs/readme/README_zh.md)
+**English** · [Filipino](docs/readme/README_fil.md) · [简体中文](docs/readme/README_zh.md) · [繁體中文](docs/readme/README_zh-TW.md) · [日本語](docs/readme/README_ja.md) · [한국어](docs/readme/README_ko.md) · [Español](docs/readme/README_es.md) · [Français](docs/readme/README_fr.md) · [Deutsch](docs/readme/README_de.md) · [Русский](docs/readme/README_ru.md) · [Português](docs/readme/README_pt.md) · [Bahasa Indonesia](docs/readme/README_id.md)
 
 # specter: Self-Hosted Facebook Public Page Scraper
 
