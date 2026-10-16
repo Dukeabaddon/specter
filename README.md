@@ -9,14 +9,15 @@
 **See a public page post. Extract it in sub-seconds without getting banned, paying for SaaS, or burning personal accounts.**
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![CI](https://img.shields.io/badge/CI-Passing-brightgreen.svg?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/Dukeabaddon/specter/actions)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?style=flat-square&logo=docker&logoColor=white)](#quick-start)
+[![Integrations](https://img.shields.io/badge/Integrations-n8n%20%7C%20Webhooks-FF6D5A.svg?style=flat-square)](docs/integrations/n8n.md)
 [![Playwright](https://img.shields.io/badge/Playwright-Stealth-green.svg?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev)
-[![Architecture](https://img.shields.io/badge/Architecture-Dual--Mode%20Hybrid-orange.svg?style=flat-square)](#how-specter-works)
-[![Zero Credentials](https://img.shields.io/badge/Auth-Zero%20Account%20Required-success.svg?style=flat-square)](#anti-ban-architecture)
 [![License: MIT](https://img.shields.io/badge/License-MIT-f4c430.svg?style=flat-square)](LICENSE)
 
 <br/>
 
-[Quick start](#quick-start) · [How specter works](#how-specter-works) · [Anti-ban architecture](#anti-ban-architecture) · [CLI reference](#cli-reference) · [Python API](#python-api-usage) · [Ecosystem](#ecosystem)
+[Quick start](#quick-start) · [n8n & Webhooks](docs/integrations/n8n.md) · [How specter works](#how-specter-works) · [Anti-ban architecture](#anti-ban-architecture) · [CLI reference](#cli-reference) · [Docker deploy](#quick-start)
 
 <code>git clone https://github.com/Dukeabaddon/specter.git</code>
 
@@ -77,42 +78,52 @@ Using the **Reverse Engineer Anything (REA)** methodology alongside deep inspect
 
 ## Quick Start
 
-### 1. Prerequisites
-- Python 3.10+
-- macOS, Linux, or Windows (WSL recommended)
+### Option A: Docker Compose (Recommended)
+Run a self-contained monitoring daemon with zero manual Python environment configuration:
 
-### 2. Installation
 ```bash
-# Clone the repository
 git clone https://github.com/Dukeabaddon/specter.git
 cd specter
 
-# Create virtual environment
+# Start daemon in background (polls every 5 minutes, persists to ./data)
+docker compose up -d
+```
+
+### Option B: Local CLI / Python
+```bash
+git clone https://github.com/Dukeabaddon/specter.git
+cd specter
+
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Install dependencies and Playwright browser
 pip install -r requirements.txt
 playwright install chromium
-```
 
-### 3. Run a Live Test Scrape
-Scrape any public Facebook page (e.g. `QCGov`, `NASA`, `Meta`):
-```bash
+# Run a live test scrape
 python3 main.py --page QCGov --limit 3
 ```
 
-Sample output:
-```text
-Running single poll on 'QCGov' with mode='auto'...
-[INFO] Attempting Tier 1 (Fast HTTP) for 'QCGov'...
-[INFO] GET https://www.facebook.com/QCGov
-[INFO] Extracted 1 posts from HTTP response in 0.58s!
-[INFO] Tier 1 HTTP succeeded with 1 posts!
-[INFO] NEW POST [pfbid02cGhjwL7P...] from QCGov
+---
 
-=== Poll Complete ===
-New Posts Stored: 1
+## Automation & Workflow Integration
+
+specter is built to plug directly into automation engines like **n8n**, **Make**, **Zapier**, and custom microservices.
+
+### 1. Webhook Dispatch (n8n / Discord / Telegram)
+Configure specter to POST structured JSON payloads to your webhook whenever a new post is published:
+
+```bash
+python3 main.py --page QCGov --monitor --webhook https://n8n.yourdomain.com/webhook/fb-posts
+```
+
+See the complete **[n8n Automation Guide](docs/integrations/n8n.md)** for a copy-paste workflow template.
+
+### 2. Unix Pipe & JSON Output
+Stream structured JSON directly to `stdout` for piping into `jq`, CLI scripts, or automated processing nodes:
+
+```bash
+python3 main.py --page QCGov --limit 3 --json | jq '.[0].text'
 ```
 
 ---
@@ -121,11 +132,14 @@ New Posts Stored: 1
 
 | Command | Description |
 |---|---|
-| `python3 main.py --page <NAME>` | Poll a specific public page once (e.g. `QCGov`, `cnn`, `bbcnews`) |
-| `python3 main.py --page <NAME> --mode auto` | **Default**: Fast HTTP first, stealth Playwright fallback |
-| `python3 main.py --page <NAME> --mode http` | Force HTTP-only mode |
-| `python3 main.py --page <NAME> --mode playwright` | Force Playwright browser mode |
-| `python3 main.py --page <NAME> --monitor --interval 300` | Run continuous monitoring daemon every 5 minutes (300s) |
+| `python3 main.py --page <NAME>` | Poll a specific public page once (e.g. `QCGov`, `cnn`, `NASA`) |
+| `python3 main.py --page <A,B>` | Monitor multiple pages simultaneously (comma-separated) |
+| `python3 main.py --page <NAME> --monitor --interval 300` | Run continuous monitoring daemon every 5 minutes |
+| `python3 main.py --page <NAME> --webhook <URL>` | Dispatch HTTP POST to webhook on every new post |
+| `python3 main.py --page <NAME> --json` | Output structured JSON to stdout (suppresses logs) |
+| `python3 main.py --mode auto` | **Default**: Fast HTTP first, stealth Playwright fallback |
+| `python3 main.py --mode http` | Force Fast HTTP-only mode (~500ms) |
+| `python3 main.py --mode playwright` | Force stealth Playwright Chromium mode |
 | `python3 main.py --db-list` | Display recent stored posts from SQLite database |
 | `python3 main.py --test-classifier` | Run built-in sample downstream event classification test |
 
