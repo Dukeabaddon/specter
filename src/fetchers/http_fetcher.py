@@ -113,11 +113,20 @@ class HttpFetcher(BaseFetcher):
 
                 post_url = f"https://www.facebook.com/{page_name}/posts/{post_id}" if not post_id.startswith("http_") else f"https://www.facebook.com/{page_name}"
                 
+                # Extract image URIs associated with Relay stream
+                image_uris = re.findall(r'"uri":\s*"(https:[^"]*?(?:scontent|fbcdn)[^"]*?)"', content)
+                clean_images = []
+                for img_url in image_uris:
+                    u = img_url.replace('\\/', '/').replace('&amp;', '&')
+                    if 'emoji.php' not in u and 'static.xx' not in u and u not in clean_images:
+                        clean_images.append(u)
+
                 extracted_posts.append(Post(
                     post_id=post_id,
                     page_name=page_name,
                     text=clean_text,
                     url=post_url,
+                    images=clean_images[:6],
                     raw_metadata={"source": "http_relay_json"}
                 ))
                 if len(extracted_posts) >= limit:
