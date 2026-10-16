@@ -11,13 +11,13 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen.svg?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/Dukeabaddon/specter/actions)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?style=flat-square&logo=docker&logoColor=white)](#quick-start)
-[![Integrations](https://img.shields.io/badge/Integrations-n8n%20%7C%20Webhooks-FF6D5A.svg?style=flat-square)](docs/integrations/n8n.md)
+[![Integrations](https://img.shields.io/badge/Integrations-n8n%20%7C%20Discord%20%7C%20Telegram-FF6D5A.svg?style=flat-square)](docs/integrations/README.md)
 [![Playwright](https://img.shields.io/badge/Playwright-Stealth-green.svg?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-f4c430.svg?style=flat-square)](LICENSE)
 
 <br/>
 
-[Quick start](#quick-start) · [n8n & Webhooks](docs/integrations/n8n.md) · [How specter works](#how-specter-works) · [Anti-ban architecture](#anti-ban-architecture) · [CLI reference](#cli-reference) · [FAQ](#faq)
+[Quick start](#quick-start) · [Integrations](docs/integrations/README.md) · [How specter works](#how-specter-works) · [Anti-ban architecture](#anti-ban-architecture) · [CLI reference](#cli-reference) · [FAQ](#faq)
 
 <code>git clone https://github.com/Dukeabaddon/specter.git</code>
 
@@ -108,16 +108,23 @@ python3 main.py --page QCGov --limit 3
 
 ## Automation & Workflow Integration
 
-specter is built to plug directly into automation engines like **n8n**, **Make**, **Zapier**, and custom microservices.
+specter connects directly to **n8n**, **Discord**, **Telegram**, **Make**, **Zapier**, and custom HTTP microservices.
 
-### 1. Webhook Dispatch (n8n / Discord / Telegram)
+Explore the complete guides in the **[Integrations Hub](docs/integrations/README.md)**:
+
+| Integration | Guide | Description |
+|---|---|---|
+| **n8n** | [n8n Workflow Guide](docs/integrations/n8n.md) | Ready-to-import workflow template for alerts and databases |
+| **Discord** | [Discord Webhook Guide](docs/integrations/discord.md) | Push rich embed alert cards directly into Discord channels |
+| **Telegram** | [Telegram Bot Guide](docs/integrations/telegram.md) | Broadcast instant post advisories to Telegram channels and groups |
+| **HTTP Webhooks & APIs** | [Custom Webhooks Guide](docs/integrations/webhooks.md) | Standard JSON schema for Make, Zapier, FastAPI, and custom backends |
+
+### 1. Webhook Dispatch (Universal HTTP POST)
 Configure specter to POST structured JSON payloads to your webhook whenever a new post is published:
 
 ```bash
 python3 main.py --page QCGov --monitor --webhook https://n8n.yourdomain.com/webhook/fb-posts
 ```
-
-See the complete **[n8n Automation Guide](docs/integrations/n8n.md)** for a copy-paste workflow template.
 
 ### 2. Unix Pipe & JSON Output
 Stream structured JSON directly to `stdout` for piping into `jq`, CLI scripts, or automated processing nodes:
@@ -206,7 +213,7 @@ No. specter operates exclusively on ephemeral public visitor sessions (`datr`). 
 <summary><b>How do I send posts to n8n, Make, Discord, or Telegram?</b></summary>
 <br/>
 
-Pass `--webhook <URL>` to the CLI or set `SPECTER_WEBHOOK_URL` in Docker. Whenever a fresh post is indexed, specter immediately dispatches an HTTP POST payload with structured JSON containing post text, media links, and metadata. See the **[n8n Integration Guide](docs/integrations/n8n.md)** for a copy-paste workflow template.
+Pass `--webhook <URL>` to the CLI or set `SPECTER_WEBHOOK_URL` in Docker. Whenever a fresh post is indexed, specter immediately dispatches an HTTP POST payload with structured JSON containing post text, media links, and metadata. See the **[Integrations Hub](docs/integrations/README.md)** for n8n, Discord, Telegram, and custom webhook guides.
 </details>
 
 <details>
