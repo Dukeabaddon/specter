@@ -76,6 +76,12 @@ def main():
         help="Output results as structured JSON to stdout for piping or automation"
     )
     parser.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help="Max concurrent worker threads for multi-page polling (default: 4)"
+    )
+    parser.add_argument(
         "--db-list",
         action="store_true",
         help="List stored posts from local SQLite database"
@@ -124,7 +130,7 @@ def main():
         else:
             print(f"\n=== Stored Posts in Database ({len(posts)} total) ===")
             for p in posts:
-                susp_mark = "🚨 [SUSPENSION]" if p.is_suspension else "  "
+                susp_mark = "[SUSPENSION]" if p.is_suspension else "            "
                 print(f"{susp_mark} [{p.post_id}] {p.page_name} | {p.scraped_at}")
                 print(f"    URL: {p.url}")
                 print(f"    Text: {p.text[:120].replace(chr(10), ' ')}...")
@@ -137,7 +143,7 @@ def main():
         else:
             print(f"\n=== Detected Class Suspension Announcements ({len(posts)} found) ===")
             for p in posts:
-                print(f"🚨 [{p.post_id}] {p.page_name} | {p.scraped_at}")
+                print(f"[SUSPENSION] [{p.post_id}] {p.page_name} | {p.scraped_at}")
                 print(f"    URL: {p.url}")
                 print(f"    Details: {p.suspension_details}")
                 print(f"    Text: {p.text}\n")
@@ -149,7 +155,8 @@ def main():
         pages=pages,
         db=db,
         fetcher=fetcher,
-        webhook_url=args.webhook
+        webhook_url=args.webhook,
+        max_workers=args.workers
     )
 
     if args.monitor:
@@ -163,16 +170,17 @@ def main():
         if args.json:
             print(json.dumps([p.to_dict() for p in latest], indent=2))
         else:
-            print(f"\nRunning single poll on {pages} with mode='{args.mode}'...")
+            print(f"\nRunning poll on {pages} with mode='{args.mode}'...")
             print(f"\n=== Poll Complete ===")
-            print(f"New Posts Stored: {summary['new_posts_found']}")
+            print(f"New Posts Indexed: {summary['new_posts_found']}")
+            print(f"Duplicates Skipped (Already in SQLite): {summary['duplicates_skipped']}")
             print(f"Suspensions Detected: {summary['suspensions_detected']}")
             if args.webhook:
                 print(f"Webhook Configured: {args.webhook}")
 
             print(f"\n--- Latest Posts ({len(latest)} retrieved) ---")
             for i, p in enumerate(latest):
-                flag = " [CLASS SUSPENSION!]" if p.is_suspension else ""
+                flag = " [CLASS SUSPENSION]" if p.is_suspension else ""
                 print(f"\nPost #{i+1}{flag}:")
                 print(f"  ID: {p.post_id}")
                 print(f"  Page: {p.page_name}")

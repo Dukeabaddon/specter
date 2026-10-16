@@ -17,7 +17,7 @@
 
 <br/>
 
-[Quick start](#quick-start) · [n8n & Webhooks](docs/integrations/n8n.md) · [How specter works](#how-specter-works) · [Anti-ban architecture](#anti-ban-architecture) · [CLI reference](#cli-reference) · [Docker deploy](#quick-start)
+[Quick start](#quick-start) · [n8n & Webhooks](docs/integrations/n8n.md) · [How specter works](#how-specter-works) · [Anti-ban architecture](#anti-ban-architecture) · [CLI reference](#cli-reference) · [FAQ](#faq)
 
 <code>git clone https://github.com/Dukeabaddon/specter.git</code>
 
@@ -184,10 +184,59 @@ for post in posts:
 - [x] Reverse-engineer modern Meta Comet React SPA and Relay architecture
 - [x] Dual-mode hybrid fetcher (Fast HTTP + Stealth Playwright fallback)
 - [x] Automated login dialog suppression and virtualized feed scrolling
-- [x] SQLite deduplication engine
-- [ ] Multi-page concurrent polling worker pool
-- [ ] Direct webhook emitter (Discord, Telegram, Slack, custom HTTP POST)
-- [ ] Headless Docker container with pre-installed Chromium
+- [x] SQLite deduplication engine (SHA-256 fingerprinting)
+- [x] Multi-page concurrent polling worker pool (`--workers`)
+- [x] Direct webhook emitter (n8n, Discord, Telegram, custom HTTP POST)
+- [x] Headless Docker container with pre-installed Chromium
+- [ ] FastAPI lightweight REST & health probe server (`/v1/posts`, `/healthz`)
+- [ ] Dynamic residential & datacenter proxy rotation middleware
+- [ ] Minimalist real-time WebUI monitoring dashboard
+
+---
+
+## FAQ
+
+<details>
+<summary><b>Why does specter report "0 new posts" on repeated polls?</b></summary>
+<br/>
+
+specter uses deterministic SHA-256 content fingerprinting stored in SQLite. When a post is detected for the first time, it is indexed and dispatched to configured webhooks. On subsequent polling cycles, identical posts are recognized as already indexed and skipped to prevent duplicate alerts or database bloat.
+</details>
+
+<details>
+<summary><b>How many Facebook pages can I monitor simultaneously?</b></summary>
+<br/>
+
+You can pass multiple comma-separated page names (e.g. `--page QCGov,ManilaPIO,PasigInfo`). specter leverages a configurable multi-threaded worker pool (`--workers 4`) to poll all configured pages concurrently in parallel.
+</details>
+
+<details>
+<summary><b>Do I need a Facebook account or personal cookies?</b></summary>
+<br/>
+
+No. specter operates exclusively on ephemeral public visitor sessions (`datr`). You never supply personal account credentials (`c_user` or `xs`), which completely eliminates account ban risks.
+</details>
+
+<details>
+<summary><b>How do I send posts to n8n, Make, Discord, or Telegram?</b></summary>
+<br/>
+
+Pass `--webhook <URL>` to the CLI or set `SPECTER_WEBHOOK_URL` in Docker. Whenever a fresh post is indexed, specter immediately dispatches an HTTP POST payload with structured JSON containing post text, media links, and metadata. See the **[n8n Integration Guide](docs/integrations/n8n.md)** for a copy-paste workflow template.
+</details>
+
+<details>
+<summary><b>Can I run specter in Docker or on a self-hosted VPS?</b></summary>
+<br/>
+
+Yes. The repository includes an official `Dockerfile` and `docker-compose.yml` pre-configured with headless Chromium and persistent volume storage (`docker compose up -d`).
+</details>
+
+<details>
+<summary><b>What happens if Meta updates its frontend layout?</b></summary>
+<br/>
+
+specter is self-healing. If Meta rotates visitor token schemas or edge parameters causing Fast HTTP (Tier 1) to encounter a barrier, the engine automatically falls back to stealth Playwright (Tier 2) to renew the session cookie jar.
+</details>
 
 ---
 
